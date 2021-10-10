@@ -17,7 +17,21 @@ function render(component, container) {
   const VDOM = Object.entries(props).reduce(
     (totalNode, [key, value]) => {
       if (key !== "children") {
-        totalNode[key] = value;
+        if (key !== "children") {
+          switch (key) {
+            case "className":
+              totalNode.setAttribute("class", value);
+              break;
+
+            case "onClick":
+              totalNode["onclick"] = value;
+              break;
+
+            default:
+              totalNode[key] = value;
+              break;
+          }
+        }
       }
 
       return totalNode;
