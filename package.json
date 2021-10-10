@@ -1,0 +1,14 @@
+{
+  "name": "javascript-own-ui-library",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/yungo1846/javascript-own-ui-library.git",
+  "author": "yungo1846 <yungo1468@naver.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "babel-preset-react": "^6.24.1"
+  }
+}
