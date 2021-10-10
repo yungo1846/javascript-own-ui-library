@@ -12,35 +12,51 @@ function createTextElement(text) {
   return createElement("TEXT", { nodeValue: text });
 }
 
-function render(component, container) {
-  const { type, props } = typeof component === "function" ? component() : component;
-  const VDOM = Object.entries(props).reduce(
-    (totalNode, [key, value]) => {
-      if (key !== "children") {
-        if (key !== "children") {
-          switch (key) {
-            case "className":
-              totalNode.setAttribute("class", value);
-              break;
+function getInitNode(type) {
+  if (type === "TEXT") {
+    return document.createTextNode("");
+  } else {
+    try {
+      return document.createElement(type);
+    } catch {
+      return document.createDocumentFragment();
+    }
+  }
+}
 
-            case "onClick":
-              totalNode["onclick"] = value;
-              break;
+function _render({ _type, _props }, container) {
+  const { type, props } = typeof _type === "function" ? _type() : { type: _type, props: _props };
 
-            default:
-              totalNode[key] = value;
-              break;
-          }
-        }
+  const initNode = getInitNode(type);
+
+  const VDOM = Object.entries(props).reduce((totalNode, [key, value]) => {
+    if (key !== "children") {
+      switch (key) {
+        case "className":
+          totalNode.setAttribute("class", value);
+          break;
+
+        case "onClick":
+          totalNode["onclick"] = value;
+          break;
+
+        default:
+          totalNode[key] = value;
+          break;
       }
+    }
 
-      return totalNode;
-    },
-    type === "TEXT" ? document.createTextNode("") : document.createElement(type)
-  );
+    return totalNode;
+  }, initNode);
 
   props.children.forEach((child) => render(child, VDOM));
   container.appendChild(VDOM);
+}
+
+function render(component, container) {
+  let { type, props } = typeof component === "function" ? component() : component;
+
+  _render({ _type: type, _props: props }, container);
 }
 
 export const React = {
