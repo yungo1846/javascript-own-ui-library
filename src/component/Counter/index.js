@@ -1,33 +1,39 @@
-import { React } from "../../../CustomReact";
+import { Component, React } from "../../../CustomReact";
+export default class Counter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
 
-export default function Counter() {
-  const onClickPlus = () => {
-    console.log("plus");
-  };
+  onClickPlus() {
+    this.setState({ count: this.state.count + 1 });
+  }
 
-  const onClickMinus = () => {
-    console.log("minus");
-  };
+  onClickMinus() {
+    this.setState({ count: this.state.count - 1 });
+  }
 
-  const getCount = (count) => {
-    return count;
-  };
+  render() {
+    const { count } = this.state;
 
-  return (
-    <div className="container">
-      <span className="count">count: {false ? getCount(7777) : 0}</span>
+    return (
+      <div className="container">
+        <span className="count">count: {count}</span>
 
-      <div className="btn-group">
-        <button>
-          <strong onClick={onClickMinus}>-</strong>
-        </button>
-        <button>
-          <strong>RESET</strong>
-        </button>
-        <button>
-          <strong onClick={onClickPlus}>+</strong>
-        </button>
+        <div className="btn-group">
+          <button>
+            <strong onClick={() => this.onClickMinus()}>-</strong>
+          </button>
+          <button>
+            <strong>RESET</strong>
+          </button>
+          <button>
+            <strong onClick={() => this.onClickPlus()}>+</strong>
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

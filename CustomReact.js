@@ -37,8 +37,16 @@ function getInitNode(type) {
   }
 }
 
-function _render({ _type, _props }, container) {
-  const { type, props } = typeof _type === "function" ? _type() : { type: _type, props: _props };
+function _render({ type, props }, container) {
+  let { type: _type, props: _props } = { type, props };
+
+  if (typeof type === "function") {
+    const Component = new type();
+    const renderElement = Component.render();
+
+    _type = renderElement.type;
+    _props = renderElement.props;
+  }
 
   const initNode = getInitNode(type);
 
@@ -63,14 +71,40 @@ function _render({ _type, _props }, container) {
     return totalNode;
   }, initNode);
 
-  props.children.forEach((child) => render(child, VDOM));
+  _props.children.forEach((child) => _render(child, VDOM));
   container.appendChild(VDOM);
 }
 
-function render(component, container) {
-  let { type, props } = typeof component === "function" ? component() : component;
+// TODO: 상태변경 시 DOM tree 업데이트 (리렌더링)
+const VDOM_TREE = {};
 
-  _render({ _type: type, _props: props }, container);
+function render(component, container) {
+  if (!component instanceof Object) {
+    console.error("component should be class which extends Component");
+    return;
+  }
+
+  const Component = new component();
+  const { type, props } = Component.render();
+
+  VDOM_TREE.type = type;
+  VDOM_TREE.props = props;
+  console.log(VDOM_TREE);
+  _render({ type, props }, container);
+}
+
+export class Component {
+  constructor(props) {
+    this.props = props;
+    this.state = {};
+  }
+
+  setState(newState) {
+    this.state = newState;
+    this.render();
+  }
+
+  render() {}
 }
 
 export const React = {

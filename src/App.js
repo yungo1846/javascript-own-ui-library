@@ -1,10 +1,12 @@
-import { React } from "../CustomReact";
+import { Component, React } from "../CustomReact";
 import Counter from "./component/Counter";
 
-export default function App() {
-  return (
-    <div>
-      <Counter></Counter>
-    </div>
-  );
+export default class App extends Component {
+  render() {
+    return (
+      <div>
+        <Counter></Counter>
+      </div>
+    );
+  }
 }
