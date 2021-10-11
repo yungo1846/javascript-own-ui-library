@@ -9,9 +9,13 @@ export default function Counter() {
     console.log("minus");
   };
 
+  const getCount = (count) => {
+    return count;
+  };
+
   return (
     <div className="container">
-      <span className="count">0</span>
+      <span className="count">count: {false ? getCount(7777) : 0}</span>
 
       <div className="btn-group">
         <button>

@@ -3,7 +3,20 @@ function createElement(type, props, ...children) {
     type,
     props: {
       ...props,
-      children: children.map((child) => (typeof child === "string" ? createTextElement(child) : child)),
+      children: children.map((child) => {
+        switch (typeof child) {
+          case "string":
+          case "number":
+            return createTextElement(child);
+
+          case "function":
+            const result = child();
+            return typeof result === "function" ? createElement(result) : createTextElement(result);
+
+          default:
+            return child;
+        }
+      }),
     },
   };
 }
@@ -29,6 +42,7 @@ function _render({ _type, _props }, container) {
 
   const initNode = getInitNode(type);
 
+  //debugger;
   const VDOM = Object.entries(props).reduce((totalNode, [key, value]) => {
     if (key !== "children") {
       switch (key) {
